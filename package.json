@@ -1,0 +1,23 @@
+{
+   "name": "my-project",
+   "source": "src/index.html",
+   "browserslist": "> 0.5%, last 2 versions, not dead",
+   "parcelCleanPaths": [
+      "docs",
+      ".cache"
+   ],
+   "scripts": {
+      "start": "parcel",
+      "build": "parcel build --no-source-maps --dist-dir docs --public-url ./",
+      "watch": "parcel src/index.html --open --port 3000"
+   },
+   "devDependencies": {
+      "parcel": "latest",
+      "parcel-plugin-clean-easy": "^1.0.2",
+      "process": "^0.11.10",
+      "sharp": "^0.32.6"
+   },
+   "dependencies": {
+      "firebase": "^10.5.2"
+   }
+}
