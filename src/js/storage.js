@@ -1,14 +1,27 @@
-const saveFilmsToLocalStorage = () => {
-   const filmsString = JSON.stringify(films);
-   localStorage.setItem(STORAGE_LABEL_MOVIES, filmsString);
-};
+export function createStorage(key) {
+   return {
+      key,
 
-const getFilmsFromLocalStorage = () => {
-   const filmsFromLocalStorageString =
-      localStorage.getItem(STORAGE_LABEL_MOVIES);
-   const filmsFromLocalStorage = JSON.parse(filmsFromLocalStorageString);
+      read: function () {
+         const dataString = localStorage.getItem(this.key);
 
-   if (Array.isArray(filmsFromLocalStorage)) {
-      films = filmsFromLocalStorage;
-   }
-};
+         if (!dataString) {
+            return null;
+         }
+
+         const data = JSON.parse(dataString);
+
+         if (Array.isArray(data)) {
+            return data;
+         } else {
+            return null;
+         }
+      },
+
+      push: function (element) {
+         const preparedElement = JSON.stringify(element);
+
+         localStorage.setItem(this.key, preparedElement);
+      },
+   };
+}

@@ -1,30 +1,34 @@
+import { createView } from "./view.js";
+import { createModel } from "./model.js";
+import { createStorage } from "./storage.js";
+import {
+   LIMIT_LENGTH_FILM_NAME,
+   REG_SPACES_PUNСTUATION_MARKS,
+   STORAGE_LABEL_MOVIES,
+} from "./constants.js";
+
 const filmNameNode = document.querySelector("#filmName");
 const filmAddButton = document.querySelector("#filmAddButton");
 const filmErrorNode = document.querySelector("#filmError");
 
+let initialMovies = [];
+
 const view = createView("#movies");
+const model = createModel(initialMovies);
+const storage = createStorage(STORAGE_LABEL_MOVIES);
 
-let films = [];
+const init = () => {
+   const moviesFromStorage = storage.read();
 
-function Film(name) {
-   this.name = name;
-   this.check = "unchecked";
-}
+   if (moviesFromStorage) {
+      model.update(moviesFromStorage);
+   }
 
-const getFilmFromUser = () => {
-   const filmFromUser = filmNameNode.value;
+   view.render(model.get());
 
-   const film = new Film(filmFromUser);
-   return film;
+   filmNameNode.focus();
 };
-
-const addFilmToCatalog = (film) => films.push(film);
-
-const getfilms = () => films;
-
-const renderFilms = () => {};
-
-const clearFilmNode = () => (filmNameNode.value = "");
+init();
 
 const validationFilmNameFromUser = () => {
    const filmFromUser = filmNameNode.value;
@@ -36,8 +40,7 @@ const validationFilmNameFromUser = () => {
    const lengthFilmFromUserWithoutSpace = filmFromUserWithoutSpace.length;
 
    if (!filmFromUser || lengthFilmFromUserWithoutSpace == 0) {
-      filmErrorNode.textContent = "Введите название фильма";
-      clearFilmNode();
+      filmErrorNode.textContent = "Введите правильно название фильма";
       filmNameNode.focus();
       return true;
    }
@@ -52,14 +55,19 @@ const validationFilmNameFromUser = () => {
    return false;
 };
 
+const clearFilmNode = () => (filmNameNode.value = "");
+
 const addMovieHandler = () => {
    if (validationFilmNameFromUser()) return;
 
-   const movie = getFilmFromUser();
+   const movie = model.create(filmNameNode.value);
 
-   addFilmToCatalog(movie);
-   saveFilmsToLocalStorage();
-   renderFilms();
+   model.add(movie);
+
+   view.render(model.get());
+
+   storage.push(model.get());
+
    clearFilmNode();
 };
 
@@ -70,14 +78,6 @@ const addMovieByEnter = (event) => {
       filmNameNode.focus();
    }
 };
-
-const init = () => {
-   getFilmsFromLocalStorage();
-   view.render(films);
-
-   filmNameNode.focus();
-};
-init();
 
 filmAddButton.addEventListener("click", addMovieHandler);
 filmNameNode.addEventListener("keydown", addMovieByEnter);

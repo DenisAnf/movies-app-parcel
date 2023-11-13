@@ -14976,3 +14976,6 @@ node_modules/@parcel/core/test/fixtures/glob-like/[entry].js
 node_modules/@parcel/core/test/fixtures/glob-like/[entry].js
 node_modules/@parcel/core/test/fixtures/glob-like/[entry].js
 node_modules/@parcel/core/test/fixtures/glob-like/[entry].js
+dist/index.739bf03c.js
+dist/index.739bf03c.js.map
+.gitignore

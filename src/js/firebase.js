@@ -20,20 +20,20 @@ async function addFilmToFirestore() {
          checkbox: "false",
          title: "batman",
       });
-      console.log("Document written with ID: ", docRef.id);
+      //console.log("Document written with ID: ", docRef.id);
    } catch (e) {
-      console.error("Error adding document: ", e);
+      //console.error("Error adding document: ", e);
    }
 }
 
 async function readFilmsFromFirestore() {
    const querySnapshot = await getDocs(collection(db, "movies"));
    querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} => ${doc.data().title}`);
+      //console.log(`${doc.id} => ${doc.data().title}`);
    });
-   console.log(querySnapshot);
+   //console.log(querySnapshot);
 }
 
 readFilmsFromFirestore();
 
-console.log(app);
+//console.log(app);

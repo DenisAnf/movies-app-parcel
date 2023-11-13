@@ -1,4 +1,4 @@
-function createView(elementId) {
+export function createView(elementId) {
    //! ИСПРАВИТЬ СЛУШАТЕЛИ
    const outputNode = document.querySelector(elementId);
 
@@ -47,13 +47,13 @@ function createView(elementId) {
                } else {
                   element.check = "unchecked";
                }
-               saveFilmsToLocalStorage();
+               //saveFilmsToLocalStorage();
             });
 
             catalogElDeleteBtn.addEventListener("click", () => {
-               films.splice(index, 1);
-               saveFilmsToLocalStorage();
-               renderFilms();
+               //films.splice(index, 1);
+               //saveFilmsToLocalStorage();
+               //renderFilms();
             });
          });
 
