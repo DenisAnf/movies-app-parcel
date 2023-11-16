@@ -30,7 +30,7 @@ const init = () => {
 };
 init();
 
-const validationFilmNameFromUser = () => {
+const validation = () => {
    const filmFromUser = filmNameNode.value;
    const lengthFilmFromUser = filmFromUser.length;
    const filmFromUserWithoutSpace = filmFromUser.replace(
@@ -55,10 +55,8 @@ const validationFilmNameFromUser = () => {
    return false;
 };
 
-const clearFilmNode = () => (filmNameNode.value = "");
-
 const addMovieHandler = () => {
-   if (validationFilmNameFromUser()) return;
+   if (validation()) return;
 
    const movie = model.create(filmNameNode.value);
 
@@ -68,7 +66,7 @@ const addMovieHandler = () => {
 
    storage.push(model.get());
 
-   clearFilmNode();
+   filmNameNode.value = "";
 };
 
 const addMovieByEnter = (event) => {
