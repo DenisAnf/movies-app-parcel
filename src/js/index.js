@@ -10,6 +10,7 @@ import {
 const filmNameNode = document.querySelector("#filmName");
 const filmAddButton = document.querySelector("#filmAddButton");
 const filmErrorNode = document.querySelector("#filmError");
+const filmsOutputNode = document.querySelector("#movies");
 
 let initialMovies = [];
 
@@ -77,5 +78,38 @@ const addMovieByEnter = (event) => {
    }
 };
 
+const checkMovie = (event) => {
+   event.preventDefault();
+   let idFilmItem;
+
+   if (event.target.classList.contains("movies__list-item")) {
+      idFilmItem = event.target.id;
+   } else if (event.target.closest(".movies__list-item")) {
+      idFilmItem = event.target.closest(".movies__list-item").id;
+   }
+
+   view.check(model.get()[idFilmItem]);
+
+   view.render(model.get());
+
+   storage.push(model.get());
+};
+
+const deleteMovie = (event) => {
+   if (event.target.classList.contains("movie__deleteBtn")) {
+      const idFilmItem = event.target.id;
+
+      console.log(idFilmItem);
+
+      model.deleteElement(idFilmItem);
+
+      view.render(model.get());
+
+      storage.push(model.get());
+   }
+};
+
 filmAddButton.addEventListener("click", addMovieHandler);
 filmNameNode.addEventListener("keydown", addMovieByEnter);
+filmsOutputNode.addEventListener("click", checkMovie);
+filmsOutputNode.addEventListener("click", deleteMovie);

@@ -41,15 +41,6 @@ export function createView(elementId) {
 
             catalogContainer.appendChild(catalogEl);
 
-            catalogElCheckbox.addEventListener("click", () => {
-               if (element.check === "unchecked") {
-                  element.check = "checked";
-               } else {
-                  element.check = "unchecked";
-               }
-               //saveFilmsToLocalStorage();
-            });
-
             catalogElDeleteBtn.addEventListener("click", () => {
                //films.splice(index, 1);
                //saveFilmsToLocalStorage();
@@ -58,6 +49,14 @@ export function createView(elementId) {
          });
 
          this.outputNode.appendChild(catalogContainer);
+      },
+
+      check: function (element) {
+         if (element.check === "unchecked") {
+            element.check = "checked";
+         } else {
+            element.check = "unchecked";
+         }
       },
    };
 }

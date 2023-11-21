@@ -21,5 +21,9 @@ export function createModel(movies) {
       clear: function () {
          this.movies = [];
       },
+
+      deleteElement: function (elementId) {
+         this.movies.splice(elementId, 1);
+      },
    };
 }
