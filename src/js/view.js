@@ -1,5 +1,4 @@
 export function createView(elementId) {
-   //! ИСПРАВИТЬ СЛУШАТЕЛИ
    const outputNode = document.querySelector(elementId);
 
    return {
@@ -40,12 +39,6 @@ export function createView(elementId) {
             catalogElLabel.appendChild(catalogElDeleteBtn);
 
             catalogContainer.appendChild(catalogEl);
-
-            catalogElDeleteBtn.addEventListener("click", () => {
-               //films.splice(index, 1);
-               //saveFilmsToLocalStorage();
-               //renderFilms();
-            });
          });
 
          this.outputNode.appendChild(catalogContainer);

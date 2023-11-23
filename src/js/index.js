@@ -19,15 +19,13 @@ const model = createModel(initialMovies);
 const storage = createStorage(STORAGE_LABEL_MOVIES);
 
 const init = () => {
-   const moviesFromStorage = storage.read();
+   storage.read().then((movies) => {
+      model.update(movies);
 
-   if (moviesFromStorage) {
-      model.update(moviesFromStorage);
-   }
+      view.render(model.get());
 
-   view.render(model.get());
-
-   filmNameNode.focus();
+      filmNameNode.focus();
+   });
 };
 init();
 
@@ -65,7 +63,7 @@ const addMovieHandler = () => {
 
    view.render(model.get());
 
-   storage.push(model.get());
+   storage.push(movie);
 
    filmNameNode.value = "";
 };
@@ -78,7 +76,7 @@ const addMovieByEnter = (event) => {
    }
 };
 
-const checkMovie = (event) => {
+/*const checkMovie = (event) => {
    event.preventDefault();
    let idFilmItem;
 
@@ -93,23 +91,21 @@ const checkMovie = (event) => {
    view.render(model.get());
 
    storage.push(model.get());
-};
+};*/
 
 const deleteMovie = (event) => {
    if (event.target.classList.contains("movie__deleteBtn")) {
       const idFilmItem = event.target.id;
 
-      console.log(idFilmItem);
+      storage.delete(model.get()[idFilmItem]);
 
       model.deleteElement(idFilmItem);
 
       view.render(model.get());
-
-      storage.push(model.get());
    }
 };
 
 filmAddButton.addEventListener("click", addMovieHandler);
 filmNameNode.addEventListener("keydown", addMovieByEnter);
-filmsOutputNode.addEventListener("click", checkMovie);
+//filmsOutputNode.addEventListener("click", checkMovie);
 filmsOutputNode.addEventListener("click", deleteMovie);

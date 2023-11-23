@@ -29,7 +29,7 @@ async function addFilmToFirestore() {
 async function readFilmsFromFirestore() {
    const querySnapshot = await getDocs(collection(db, "movies"));
    querySnapshot.forEach((doc) => {
-      //console.log(`${doc.id} => ${doc.data().title}`);
+      console.log(`${doc.id} => ${doc.data().title}`);
    });
    //console.log(querySnapshot);
 }
