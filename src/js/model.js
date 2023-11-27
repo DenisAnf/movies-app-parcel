@@ -40,7 +40,7 @@ export function createModel(movies) {
          let result = null;
 
          this.get().forEach((movie) => {
-            if (elementId === movie.id) {
+            if (elementId == movie.id) {
                result = movie;
             }
          });

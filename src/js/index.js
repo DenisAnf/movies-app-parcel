@@ -81,11 +81,7 @@ const addMovieByEnter = (event) => {
 function handleClickMovieChek(id) {
    model.toggleCheckMovie(id);
 
-   movie = model.getMovie(id);
-
-   console.log(movie);
-
-   storage.update(movie);
+   storage.update(model.getMovie(id));
 }
 
 function handleClickMovieDelete(id) {
