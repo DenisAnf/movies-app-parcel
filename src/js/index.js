@@ -83,6 +83,8 @@ function handleClickMovieChek(id) {
 
    movie = model.getMovie(id);
 
+   console.log(movie);
+
    storage.update(movie);
 }
 
