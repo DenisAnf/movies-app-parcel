@@ -1,55 +1,58 @@
-export function createView(elementId) {
+export function createView(elementId, onClickMovie, onClickDelete) {
    const outputNode = document.querySelector(elementId);
 
    return {
       outputNode,
 
-      render: function (catalog) {
+      render: function (movies) {
          this.outputNode.innerHTML = "";
 
-         const catalogContainer = document.createElement("ul");
-         catalogContainer.className = "movies__list";
-
-         catalog.forEach((element, index) => {
-            const catalogEl = document.createElement("li");
-            const catalogElLabel = document.createElement("label");
-            const catalogElCheckbox = document.createElement("input");
-            const catalogElFakecheckbox = document.createElement("div");
-            const catalogElTitle = document.createElement("span");
-            const catalogElDeleteBtn = document.createElement("button");
-
-            catalogEl.className = "movies__list-item";
-            catalogElLabel.className = "movie";
-            catalogElCheckbox.className = "movie__checkbox";
-            catalogElFakecheckbox.className = "movie__fakecheckbox";
-            catalogElTitle.className = "movie__title";
-            catalogElDeleteBtn.className = "movie__deleteBtn";
-
-            catalogEl.setAttribute("id", index);
-            catalogElCheckbox.setAttribute("type", "checkbox");
-            catalogElCheckbox.setAttribute(element.check, "");
-            catalogElDeleteBtn.setAttribute("id", index);
-
-            catalogElTitle.innerText = element.name;
-
-            catalogEl.appendChild(catalogElLabel);
-            catalogElLabel.appendChild(catalogElCheckbox);
-            catalogElLabel.appendChild(catalogElFakecheckbox);
-            catalogElLabel.appendChild(catalogElTitle);
-            catalogElLabel.appendChild(catalogElDeleteBtn);
-
-            catalogContainer.appendChild(catalogEl);
+         movies.forEach((movie) => {
+            this.add(movie);
          });
-
-         this.outputNode.appendChild(catalogContainer);
       },
 
-      check: function (element) {
-         if (element.check === "unchecked") {
-            element.check = "checked";
-         } else {
-            element.check = "unchecked";
-         }
+      add: function (movie) {
+         const li = document.createElement("li");
+         const label = document.createElement("label");
+         const checkbox = document.createElement("input");
+         const fakeCheckbox = document.createElement("div");
+         const title = document.createElement("span");
+         const deleteBtn = document.createElement("button");
+
+         li.className = "movies__list-item";
+         label.className = "movie";
+         checkbox.className = "movie__checkbox";
+         fakeCheckbox.className = "movie__fakecheckbox";
+         title.className = "movie__title";
+         deleteBtn.className = "movie__deleteBtn";
+
+         li.setAttribute("id", movie.id);
+         checkbox.setAttribute("type", "checkbox");
+         checkbox.setAttribute(movie.check, "");
+         deleteBtn.setAttribute("type", "button");
+
+         checkbox.onclick = () => {
+            onClickMovie(movie.id);
+         };
+
+         deleteBtn.onclick = () => {
+            onClickDelete(movie.id);
+         };
+
+         title.innerText = movie.name;
+
+         li.appendChild(label);
+         label.appendChild(checkbox);
+         label.appendChild(fakeCheckbox);
+         label.appendChild(title);
+         label.appendChild(deleteBtn);
+
+         this.outputNode.appendChild(li);
       },
+
+      /*delete: function (id) {
+         this.outputNode.removeChild();
+      },*/
    };
 }

@@ -1,11 +1,15 @@
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore } from "firebase/firestore";
 import {
+   getFirestore,
    collection,
    doc,
-   addDoc,
+   setDoc,
    getDocs,
    deleteDoc,
+   writeBatch,
+   serverTimestamp,
+   query,
+   orderBy,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -26,7 +30,9 @@ export function createStorage(key) {
       db,
 
       read: async function () {
-         const querySnapshot = await getDocs(collection(this.db, this.key));
+         const ref = collection(this.db, this.key);
+         const q = query(ref, orderBy("createdAt"));
+         const querySnapshot = await getDocs(q);
          const movies = [];
 
          querySnapshot.forEach((doc) => {
@@ -42,18 +48,27 @@ export function createStorage(key) {
 
       push: async function (movie) {
          try {
-            const docRef = await addDoc(collection(this.db, this.key), {
+            await setDoc(doc(this.db, this.key, movie.id), {
                name: movie.name,
                check: movie.check,
+               createdAt: serverTimestamp(),
             });
-            console.log("Document written with ID: ", docRef.id);
          } catch (e) {
             console.error("Error adding document: ", e);
          }
       },
 
-      delete: async function (movie) {
-         await deleteDoc(doc(this.db, this.key, movie.id));
+      delete: async function (id) {
+         await deleteDoc(doc(this.db, this.key, id));
+      },
+
+      update: async function (movie) {
+         const batch = writeBatch(this.db);
+
+         const sfRef = doc(this.db, this.key, movie.id);
+         batch.update(sfRef, { check: movie.check });
+
+         await batch.commit();
       },
    };
 }

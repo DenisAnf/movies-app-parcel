@@ -10,11 +10,14 @@ import {
 const filmNameNode = document.querySelector("#filmName");
 const filmAddButton = document.querySelector("#filmAddButton");
 const filmErrorNode = document.querySelector("#filmError");
-const filmsOutputNode = document.querySelector("#movies");
 
 let initialMovies = [];
 
-const view = createView("#movies");
+const view = createView(
+   "#movies__list",
+   handleClickMovieChek,
+   handleClickMovieDelete
+);
 const model = createModel(initialMovies);
 const storage = createStorage(STORAGE_LABEL_MOVIES);
 
@@ -59,11 +62,11 @@ const addMovieHandler = () => {
 
    const movie = model.create(filmNameNode.value);
 
+   storage.push(movie);
+
    model.add(movie);
 
-   view.render(model.get());
-
-   storage.push(movie);
+   view.add(movie);
 
    filmNameNode.value = "";
 };
@@ -72,40 +75,24 @@ const addMovieByEnter = (event) => {
    if (event.keyCode === 13) {
       event.preventDefault();
       addMovieHandler();
-      filmNameNode.focus();
    }
 };
 
-/*const checkMovie = (event) => {
-   event.preventDefault();
-   let idFilmItem;
+function handleClickMovieChek(id) {
+   model.toggleCheckMovie(id);
 
-   if (event.target.classList.contains("movies__list-item")) {
-      idFilmItem = event.target.id;
-   } else if (event.target.closest(".movies__list-item")) {
-      idFilmItem = event.target.closest(".movies__list-item").id;
-   }
+   movie = model.getMovie(id);
 
-   view.check(model.get()[idFilmItem]);
+   storage.update(movie);
+}
+
+function handleClickMovieDelete(id) {
+   model.deleteElement(id);
+
+   storage.delete(id);
 
    view.render(model.get());
-
-   storage.push(model.get());
-};*/
-
-const deleteMovie = (event) => {
-   if (event.target.classList.contains("movie__deleteBtn")) {
-      const idFilmItem = event.target.id;
-
-      storage.delete(model.get()[idFilmItem]);
-
-      model.deleteElement(idFilmItem);
-
-      view.render(model.get());
-   }
-};
+}
 
 filmAddButton.addEventListener("click", addMovieHandler);
 filmNameNode.addEventListener("keydown", addMovieByEnter);
-//filmsOutputNode.addEventListener("click", checkMovie);
-filmsOutputNode.addEventListener("click", deleteMovie);
