@@ -1,57 +1,53 @@
 import { v4 as uuidv4 } from "uuid";
 
-export function createModel(movies) {
+export function createModel(moviesIds, moviesById) {
    return {
-      movies,
+      moviesIds,
+      moviesById,
 
-      update: function (movies) {
-         this.movies = movies;
-      },
-
-      create: function (name) {
+      createMovie: function (name) {
          return { name: name, check: "unchecked", id: uuidv4() };
       },
 
-      add: function (movie) {
-         this.movies.push(movie);
+      addMovie: function (movie) {
+         this.moviesIds.push(movie.id);
+         this.moviesById[movie.id] = movie;
       },
 
-      get: function () {
-         return this.movies;
+      setMovies: function (movies) {
+         this.moviesIds = [];
+         this.moviesById = {};
+
+         movies.forEach((movie) => {
+            this.moviesIds.push(movie.id);
+            this.moviesById[movie.id] = movie;
+         });
       },
 
-      clear: function () {
-         this.movies = [];
+      getMovies: function () {
+         return {
+            moviesIds: this.moviesIds,
+            moviesById: this.moviesById,
+         };
       },
 
       toggleCheckMovie: function (elementId) {
-         this.get().forEach((movie) => {
-            if (elementId !== movie.id) return;
-
-            if (movie.check === "unchecked") {
-               movie.check = "checked";
-            } else {
-               movie.check = "unchecked";
-            }
-         });
+         if (this.moviesById[elementId].check === "unchecked") {
+            this.moviesById[elementId].check = "checked";
+         } else {
+            this.moviesById[elementId].check = "unchecked";
+         }
       },
 
       getMovie: function (elementId) {
-         let result = null;
-
-         this.get().forEach((movie) => {
-            if (elementId == movie.id) {
-               result = movie;
-            }
-         });
-
-         return result;
+         return this.moviesById[elementId];
       },
 
-      deleteElement: function (elementId) {
-         this.get().forEach((movie, index) => {
-            if (elementId === movie.id) {
-               this.movies.splice(index, 1);
+      deleteMovie: function (elementId) {
+         delete this.moviesById[elementId];
+         this.moviesIds.forEach((id, index) => {
+            if (elementId === id) {
+               this.moviesIds.splice(index, 1);
             }
          });
       },

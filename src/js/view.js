@@ -7,8 +7,8 @@ export function createView(elementId, onClickMovie, onClickDelete) {
       render: function (movies) {
          this.outputNode.innerHTML = "";
 
-         movies.forEach((movie) => {
-            this.add(movie);
+         movies.moviesIds.forEach((movieId) => {
+            this.add(movies.moviesById[movieId]);
          });
       },
 

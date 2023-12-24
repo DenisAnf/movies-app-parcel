@@ -11,21 +11,22 @@ const filmNameNode = document.querySelector("#filmName");
 const filmAddButton = document.querySelector("#filmAddButton");
 const filmErrorNode = document.querySelector("#filmError");
 
-let initialMovies = [];
+let initialMoviesIds = [];
+let initialMoviesById = {};
 
 const view = createView(
    "#movies__list",
    handleClickMovieChek,
    handleClickMovieDelete
 );
-const model = createModel(initialMovies);
+const model = createModel(initialMoviesIds, initialMoviesById);
 const storage = createStorage(STORAGE_LABEL_MOVIES);
 
 const init = () => {
    storage.read().then((movies) => {
-      model.update(movies);
+      model.setMovies(movies);
 
-      view.render(model.get());
+      view.render(model.getMovies());
 
       filmNameNode.focus();
    });
@@ -60,13 +61,13 @@ const validation = () => {
 const addMovieHandler = () => {
    if (validation()) return;
 
-   const movie = model.create(filmNameNode.value);
+   const movie = model.createMovie(filmNameNode.value);
 
    storage.push(movie);
 
-   model.add(movie);
+   model.addMovie(movie);
 
-   view.add(movie);
+   view.render(model.getMovies());
 
    filmNameNode.value = "";
 };
@@ -85,11 +86,11 @@ function handleClickMovieChek(id) {
 }
 
 function handleClickMovieDelete(id) {
-   model.deleteElement(id);
+   model.deleteMovie(id);
 
    storage.delete(id);
 
-   view.render(model.get());
+   view.render(model.getMovies());
 }
 
 filmAddButton.addEventListener("click", addMovieHandler);
